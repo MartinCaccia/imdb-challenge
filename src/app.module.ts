@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { MoviesModule } from './movies/movies.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-  }), MoviesModule],
+  }), MoviesModule, CommonModule],
   controllers: [AppController],
   providers: [AppService],
 })

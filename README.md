@@ -47,6 +47,7 @@ Copy the file .env.example and rename to .env and complete with the values you w
 ## 4. Start the postgres data base with docker
 ```
 docker-compose up -d
+In linux: sudo docker-compose up -d
 ```
 
 ## Running the app
@@ -60,6 +61,15 @@ $ yarn run start:dev
 
 # production mode
 $ yarn run start:prod
+```
+## Swagger
+```bash
+http://localhost:3000/api
+```
+
+## Curls
+```bash
+
 ```
 
 ## Test
