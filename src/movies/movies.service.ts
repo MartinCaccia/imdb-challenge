@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { FilterMovieDto } from './dto/filter-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 
@@ -27,14 +27,21 @@ export class MoviesService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(filterMovieDto: FilterMovieDto) {
     // return `This action returns all movies`;
-    const { limit =10, offset = 0} = paginationDto;
     try {
-      return await this.movieRepository.find({
-        take: limit,
-        skip: offset,
-      });
+      const { limit =10, offset = 0, director, title, genre, actors} = filterMovieDto;
+
+      const queryBuilder = this.movieRepository.createQueryBuilder();
+      const queryResult = await queryBuilder.where(
+        'director =:director or title =:title or genre =:genre or actors =:actors',
+        {director: director, title: title, genre: genre, actors: actors}
+      )
+      .offset(offset).limit(limit)
+      .orderBy('title', 'ASC')
+      .getMany();
+
+      return queryResult;
     } catch (error) {
       this.handleExceptions(error);
     }

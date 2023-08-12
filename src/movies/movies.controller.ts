@@ -4,6 +4,7 @@ import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { FilterMovieDto } from './dto/filter-movie.dto';
 
 @Controller('movies')
 @ApiTags('Movies')
@@ -16,8 +17,8 @@ export class MoviesController {
   }
 
   @Get()
-  findAll(@Query() paginationDto:PaginationDto) {
-    return this.moviesService.findAll(paginationDto);
+  findAll(@Query() filterMovieDto:FilterMovieDto) {
+    return this.moviesService.findAll(filterMovieDto);
   }
 
   @Get(':id')
