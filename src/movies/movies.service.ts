@@ -25,20 +25,8 @@ export class MoviesService {
   async create(createMovieDto: CreateMovieDto) {
     // return 'This action adds a new movie';
     try {
-      // console.log('createMovieDto: ', createMovieDto);
-      const actors = await this.actorRepository.findBy({ id: In(createMovieDto.actors) });
-      const director = await this.directorRepository.findBy({ id: createMovieDto.director });
-      // console.log('actors: ', actors);
-      // console.log('director: ', director);
-      const movie = new Movie();
-      movie.actors = actors;
-      movie.director = director[0];
-      movie.description = createMovieDto.description;
-      movie.genre = createMovieDto.genre;
-      movie.title = createMovieDto.title;
-      movie.year = createMovieDto.year;
-
-      return await this.movieRepository.save(movie);
+      const newMovie = await this.getNewMovie(createMovieDto);
+      return await this.movieRepository.save(newMovie);
     } catch (error) {
         this.handleExceptions(error);
     }
@@ -91,12 +79,11 @@ export class MoviesService {
   async update(id: number, updateMovieDto: UpdateMovieDto) {
     // return `This action updates a #${id} movie`;
     try {
-      // const movie = await this.movieRepository.preload({
-      //   id: id,
-      //   ...updateMovieDto
-      // });
-      // if(!movie) throw new NotFoundException(`Movie with id ${id} not found`);
-      // return await this.movieRepository.save(movie);
+      const movie = await this.movieRepository.findOneBy({id});
+      if(!movie) throw new NotFoundException(`Movie with id ${id} not found`);
+      const updateMovie = await this.getNewMovie(updateMovieDto);
+      this.movieRepository.merge(movie, updateMovie);
+      return this.movieRepository.save(movie);
     } catch (error) {
       this.handleExceptions(error);
     }
@@ -107,7 +94,47 @@ export class MoviesService {
     return await this.movieRepository.delete(id);
   }
 
+  private async getNewMovie(movie: CreateMovieDto | UpdateMovieDto): Promise<Movie>{
+    try {
+      const actors = await this.getActors(movie.actors);
+      const director = await this.getDirector(movie.director);
+      const newMovie = new Movie();
+      newMovie.actors = actors;
+      newMovie.director = director;
+      newMovie.description = movie.description;
+      newMovie.genre = movie.genre;
+      newMovie.title = movie.title;
+      newMovie.year = movie.year;
+      return newMovie;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+  }
+
+  private async getActors(ids: number[]): Promise<Actor[]> {
+    try {
+      const actors = await this.actorRepository.findBy({ id: In(ids) });
+      if(!actors) throw new NotFoundException(`Actors with ids ${ids} not found`);
+      return actors;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+  }
+
+  private async getDirector(id: number): Promise<Director> {
+    try {
+      const director = await this.directorRepository.findBy({ id });
+      if(!director[0]) throw new NotFoundException(`Director with id ${ id } not found`);
+      return director[0];
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+  }
+
   private handleExceptions(error: any){
+    // console.log('handleExceptions: ', error);
+    if (error.status === 404 )
+      throw new NotFoundException(error.response.message);
     if (error.code === '23505')
       throw new BadRequestException(error.detail);
     
