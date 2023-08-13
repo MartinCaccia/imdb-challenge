@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
+import { Exclude, Transform } from "class-transformer";
 import { IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, MinLength } from "class-validator";
 import { CreateDateColumn } from "typeorm";
 
@@ -9,6 +9,7 @@ export class CreateMovieDto {
     @IsString()
     @MinLength(1)
     @IsNotEmpty()
+    @Transform((param) => param.value.toLocaleLowerCase())
     title: string;
 
     @ApiProperty()
@@ -22,6 +23,12 @@ export class CreateMovieDto {
     @IsPositive()
     @IsNotEmpty()    
     director: number;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsPositive()
+    @IsNotEmpty()    
+    year: number;
 
     @ApiProperty()
     @IsNumber({},{each: true})

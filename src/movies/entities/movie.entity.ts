@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Actor } from "src/common/entities/actor.entity";
+import { Director } from "src/common/entities/director.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Movie {
@@ -10,13 +12,27 @@ export class Movie {
 
     @Column('numeric', { array: true })
     genre: number[];
-
+    
     @Column('numeric')
-    director: number;
+    year: number;
 
-    @Column('numeric', { array: true })
-    actors: number[];
+    @ManyToOne(() => Director)
+    @JoinColumn()
+    director: Director;
+
+    @ManyToMany(() => Actor, (actor) => actor.movies)
+    @JoinTable({ name: 'movies_actors'})
+    actors: Actor[];
 
     @Column('text', { default: ''})
     description: string;
+
+    @CreateDateColumn()
+    createdAt?: Date;
+
+    @UpdateDateColumn()
+    updatedAt?: Date;
+
+    @DeleteDateColumn()
+    deletedAt?: Date
 }

@@ -25,6 +25,13 @@ export class FilterMovieDto extends PartialType(PaginationDto)  {
 
     @ApiProperty({required:false})
     @IsOptional()
+    @IsNumber()
+    @IsPositive() 
+    @Type(()=>Number)  
+    year?: number;
+
+    @ApiProperty({required:false})
+    @IsOptional()
     @IsNumber({},{each: true})
     @IsArray()
     actors?: number[];
