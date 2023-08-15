@@ -1,5 +1,5 @@
-import { Actor } from "src/common/entities/actor.entity";
-import { Director } from "src/common/entities/director.entity";
+import { Actor } from "../../common/entities/actor.entity";
+import { Director } from "../../common/entities/director.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -16,11 +16,11 @@ export class Movie {
     @Column('numeric')
     year: number;
 
-    @ManyToOne(() => Director)
+    @ManyToOne(() => Director, { eager: true })
     @JoinColumn()
     director: Director;
 
-    @ManyToMany(() => Actor, (actor) => actor.movies)
+    @ManyToMany(() => Actor, (actor) => actor.movies, { eager: true })
     @JoinTable({ name: 'movies_actors'})
     actors: Actor[];
 

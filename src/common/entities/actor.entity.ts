@@ -1,4 +1,5 @@
-import { Movie } from "src/movies/entities/movie.entity";
+// import { Movie } from "src/movies/entities/movie.entity";
+import { Movie } from "../../movies/entities/movie.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()

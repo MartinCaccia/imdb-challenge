@@ -23,9 +23,13 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 # IMDB API
+Esta api cuenta con el crud de movies que permite crear, actualizar, buscar
+y eliminar peliculas.
 
 ## Description
-blablabla completar!
+DB: Postgres 8.11.2
+Framework: Nestjs 10.0.0
+Typescript: 5.1.3
 
 ## 1. Clone project
 
@@ -48,6 +52,10 @@ Copy the file .env.example and rename to .env and complete with the values you w
 ```
 docker-compose up -d
 In linux: sudo docker-compose up -d
+```
+## 4. Seed data base with fake data
+```
+yarn seed
 ```
 
 ## Running the app

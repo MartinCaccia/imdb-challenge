@@ -5,8 +5,9 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { FilterMovieDto } from './dto/filter-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
-import { Actor } from 'src/common/entities/actor.entity';
-import { Director } from 'src/common/entities/director.entity';
+import { Actor } from '../common/entities/actor.entity';
+import { Director } from '../common/entities/director.entity';
+import { BodyFilterMovieDto } from './dto/body-filter-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -32,26 +33,32 @@ export class MoviesService {
     }
   }
 
-  async findAll(filterMovieDto: FilterMovieDto) {
+  async findAll(filterMovieDto: FilterMovieDto, bodyFilterMovieDto: BodyFilterMovieDto) {
     // return `This action returns all movies`;
     try {
-      const { limit =10, offset = 0, director, title, genre, actors, year} = filterMovieDto;
-
-      const queryBuilder = this.movieRepository.createQueryBuilder();
+      const { limit =10, offset = 0, director, title, year} = filterMovieDto;
+      const { actors, genres } = bodyFilterMovieDto;
+      // console.log('actors: ', actors);
+      const queryBuilder = this.movieRepository.createQueryBuilder('m');
       const queryResult = await queryBuilder
-      .select(["Movie.title", "Movie.year"])
+      .select(["m.id AS id", "m.title AS tittle", "m.year AS year", 
+      "d.name AS director_name", "d.lastName AS director_lastname",
+      "a.name AS actor_name", "a.lastName AS actor_lastname" ])
       .where(
-        'title LIKE :title',
+        'm.title LIKE :title',
         {
           title: `%${title?.toLocaleLowerCase()}%`,
         }
       )
-      .orWhere('director =:director', {director: director})
-      // .orWhere('genre IN (:...genre)', {genre: genre})
-      // .orWhere('actors IN (:...actors)', {actors: actors})
-      .orWhere('year =:year', {year: year})
+      .orWhere('m.director =:director', {director: director})
+      .orWhere('m.year =:year', {year: year})
+      .innerJoin(Director, 'd', 'd.id = m.director')
+      .innerJoin('movies_actors', 'ma', 'ma.movieId = m.id')
+      .innerJoin(Actor, 'a', 'a.id = ma.actorId')
+      .orWhere('ma.actorId IN (:...actors)', {actors: actors})
+      // .orWhere('m.genre IN (:...genre)', {genre: genres})
       .offset(offset).limit(limit)
-      .orderBy('title', 'ASC')
+      .orderBy('m.title', 'ASC')
       // .printSql()
       // .getMany();
       // .getQueryAndParameters()
