@@ -55,6 +55,7 @@ In linux: sudo docker-compose up -d
 ```
 ## 4. Seed data base with fake data
 ```
+In another terminal execute:
 yarn seed
 ```
 
@@ -92,16 +93,39 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
-
+## ERD DB
+```mermaid
+erDiagram
+    MOVIE ||--|{ DIRECTOR : has
+    MOVIE {
+        number id PK
+        string title
+        number[] genre
+        number year
+        string description
+        number directorId
+    }
+    DIRECTOR
+    DIRECTOR {
+        number id PK
+        string name
+        string lastname
+    }
+    MOVIES_ACTORS }|--|{ MOVIE : have
+    MOVIES_ACTORS {
+        number movieId FK
+        number actorId FK
+    }
+    ACTOR }|--|{ MOVIES_ACTORS : have
+    ACTOR{ 
+        number id PK
+        string name
+        string lastname
+    }
+```
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 

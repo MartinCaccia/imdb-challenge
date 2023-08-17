@@ -12,8 +12,8 @@ export class Director {
     @Column('text')
     lastName: string;
 
-    @OneToMany(() => Movie, (movie) => movie.id)
-    @JoinColumn()
+    @OneToMany(() => Movie, (movie) => movie.director)
+    // @JoinColumn()
     movies: Movie[];
 
     @CreateDateColumn()

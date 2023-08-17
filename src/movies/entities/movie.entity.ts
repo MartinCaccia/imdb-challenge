@@ -16,8 +16,14 @@ export class Movie {
     @Column('numeric')
     year: number;
 
-    @ManyToOne(() => Director, { eager: true })
-    @JoinColumn()
+    @ManyToOne(() => Director,
+    (director) => director.movies,
+    {
+      nullable: false,
+      cascade: false,
+      eager: true
+    })
+    @JoinColumn({ name: 'directorId' })
     director: Director;
 
     @ManyToMany(() => Actor, (actor) => actor.movies, { eager: true })

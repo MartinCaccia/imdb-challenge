@@ -7,11 +7,6 @@ import actorFactory from '../factories/actor.factory';
 import directorFactory from '../factories/director.factory';
 import movieFactory from '../factories/movie.factory';
 
-// import postFactory from 'database/factories/post.factory';
-// import userFactory from 'database/factories/user.factory';
-// import PostSeeder from './post.seeder';
-// import UserSeeder from './user.seeder';
-
 export default class InitSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
