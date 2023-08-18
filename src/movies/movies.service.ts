@@ -41,9 +41,11 @@ export class MoviesService {
       // console.log('actors: ', actors);
       const queryBuilder = this.movieRepository.createQueryBuilder('m');
       const queryResult = await queryBuilder
-      .select(["m.id AS id", "m.title AS tittle", "m.year AS year", 
+      .select([
+      "m.id AS id", "m.title AS tittle", "m.year AS year", 
       "d.name AS director_name", "d.lastName AS director_lastname",
-      "a.name AS actor_name", "a.lastName AS actor_lastname" ])
+      "a.name AS actor_name", "a.lastName AS actor_lastname" 
+      ])
       .where(
         'm.title LIKE :title',
         {
@@ -52,10 +54,10 @@ export class MoviesService {
       )
       .orWhere('m.director =:director', {director: director})
       .orWhere('m.year =:year', {year: year})
-      .innerJoin(Director, 'd', 'd.id = m.director')
-      .innerJoin('movies_actors', 'ma', 'ma.movieId = m.id')
-      .innerJoin(Actor, 'a', 'a.id = ma.actorId')
-      .orWhere('ma.actorId IN (:...actors)', {actors: actors})
+      .leftJoin(Director, 'd', 'd.id = m.director')
+      .leftJoin('movies_actors', 'ma', 'ma.moviesId = m.id')
+      .leftJoin(Actor, 'a', 'a.id = ma.actorsId')
+      .orWhere('ma.actorsId IN (:...actors)', {actors: actors})
       // .orWhere('m.genre IN (:...genre)', {genre: genres})
       .offset(offset).limit(limit)
       .orderBy('m.title', 'ASC')

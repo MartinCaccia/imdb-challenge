@@ -53,7 +53,7 @@ Copy the file .env.example and rename to .env and complete with the values you w
 docker-compose up -d
 In linux: sudo docker-compose up -d
 ```
-## 4. Seed data base with fake data
+## 4. Seed data base with initial fake data
 ```
 In another terminal execute:
 yarn seed

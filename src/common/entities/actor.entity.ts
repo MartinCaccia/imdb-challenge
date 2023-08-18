@@ -2,7 +2,7 @@
 import { Movie } from "../../movies/entities/movie.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: 'actors' })
 export class Actor {
     @PrimaryGeneratedColumn('increment')
     id: number;

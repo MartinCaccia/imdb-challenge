@@ -1,7 +1,7 @@
 import { Movie } from "../../movies/entities/movie.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: 'directors' })
 export class Director {
     @PrimaryGeneratedColumn('increment')
     id: number;

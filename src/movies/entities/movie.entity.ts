@@ -2,7 +2,7 @@ import { Actor } from "../../common/entities/actor.entity";
 import { Director } from "../../common/entities/director.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: 'movies' })
 export class Movie {
     @PrimaryGeneratedColumn('increment')
     id: number;
@@ -26,7 +26,12 @@ export class Movie {
     @JoinColumn({ name: 'directorId' })
     director: Director;
 
-    @ManyToMany(() => Actor, (actor) => actor.movies, { eager: true })
+    @ManyToMany(() => Actor, (actor) => actor.movies,
+    {
+      nullable: false,
+      cascade: false,
+      eager: true
+    })
     @JoinTable({ name: 'movies_actors'})
     actors: Actor[];
 

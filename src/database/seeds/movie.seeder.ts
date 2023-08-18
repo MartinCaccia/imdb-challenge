@@ -1,7 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { Actor } from '../../common/entities/actor.entity';
-import { Director } from '../../common/entities/director.entity';
+import { Seeder, SeederFactoryManager, useSeederFactory } from 'typeorm-extension';
 import { Movie } from '../../movies/entities/movie.entity';
 
 export default class MovieSeeder implements Seeder {
@@ -10,31 +8,13 @@ export default class MovieSeeder implements Seeder {
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const connection = dataSource.initialize;
-    
-    // const actors = await factoryManager.get(Actor).saveMany(3);
-    // const director = await factoryManager.get(Director).save();
-    const movieFactory = await factoryManager.get(Movie);
-    // movieFactory.make(director);
-    // movieFactory.make(actors[0]);
-
-    // Insert only one record.
-    await movieFactory.save();
-    // Insert many records in database.
-    // await movieFactory.saveMany(10);
-
-    // **********************
-
-    // const actorRepository = dataSource.getRepository(Actor);
-    // const directorRepository = dataSource.getRepository(Director);
-
-    // const actor = await actorRepository.findOneBy({ id: (Math.floor(Math.random() * 6)+1) });
-    // const director = await directorRepository.findOneBy({ id: (Math.floor(Math.random() * 6)+1) });
-
-    // const movieFactory = await factoryManager.get(Movie);
-    
-    // // Insert only one record.
-    // await movieFactory.save();
-    // // Insert many records in database.
-    // await movieFactory.saveMany(10);
+    const movie = await useSeederFactory(Movie).make();
+    movie.director = { id: 1, name: 'Oliver', lastName: 'Ernser', 
+    movies: [movie] };
+    movie.actors = [{ id: 1, name: 'Jhon', lastName: 'Nothing',
+    movies: [movie] },
+    { id: 2, name: 'Rowan', lastName: 'Doyle',
+    movies: [movie] }];
+    await dataSource.manager.save(movie);
   }
 }

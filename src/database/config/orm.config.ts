@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import { DatabaseBaseContext, createDatabase, dropDatabase, SeederOptions } from 'typeorm-extension';
+import { SeederOptions } from 'typeorm-extension';
 import { DataSourceOptions } from 'typeorm/data-source';
 import { Movie } from "../../movies/entities/movie.entity";
 import { Actor } from '../../common/entities/actor.entity';
@@ -22,8 +22,3 @@ const options = {
 export const source = new DataSource(
   options as DataSourceOptions & SeederOptions,
 );
-
-// (async () => {
-//   await dropDatabase({ ifExist: true });
-//   await createDatabase({ ifNotExist: true });
-// })();
