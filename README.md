@@ -78,6 +78,64 @@ http://localhost:3000/api
 
 ## Curls
 ```bash
+Create user:
+curl --location --request POST 'localhost:3000/api/auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "carlos@gmail.com",
+    "password": "Abc123",
+    "fullName": "Carlos Nadie"
+
+}'
+
+Login (obtener bearer token):
+curl --location --request POST 'localhost:3000/api/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "carlos@gmail.com",
+    "password": "Abc123"
+}'
+
+Create movie:
+curl --location --request POST 'localhost:3000/api/movies' \
+--header 'Authorization: Bearer eyJ...' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Matrix 1",
+    "description": "descripcion de matrix 1",
+    "genre": [1,2,3,4,5,6],
+    "actors": [1,3],
+    "year": 2021,
+    "director": 1
+}'
+
+Patch movie:
+curl --location --request PATCH 'localhost:3000/api/movies/2' \
+--header 'Authorization: Bearer eyJ...' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Matrix 2",
+    "description": "descripcion de matrix 2",
+    "genre": [1,2,3,4],
+    "actors": [1,2],
+    "year": 1960,
+    "director": 1
+}'
+
+Get movie:
+curl --location --request GET 'localhost:3000/api/movies/2'
+
+Get all movies:
+curl --location --request GET 'localhost:3000/api/movies?limit=5&offset=0&title=matrix' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "actors": [1,2,3],
+    "genres": [1,2]
+}'
+
+Delete movie:
+curl --location --request DELETE 'localhost:3000/api/movies/2' \
+--header 'Authorization: Bearer eyJ...'
 
 ```
 

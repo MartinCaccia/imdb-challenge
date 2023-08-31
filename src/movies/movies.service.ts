@@ -38,7 +38,6 @@ export class MoviesService {
     try {
       const { limit =10, offset = 0, director, title, year} = filterMovieDto;
       const { actors, genres } = bodyFilterMovieDto;
-      // console.log('actors: ', actors);
       const queryBuilder = this.movieRepository.createQueryBuilder('m');
       const queryResult = await queryBuilder
       .select([
@@ -141,7 +140,6 @@ export class MoviesService {
   }
 
   private handleExceptions(error: any){
-    // console.log('handleExceptions: ', error);
     if (error.status === 404 )
       throw new NotFoundException(error.response.message);
     if (error.code === '23505')

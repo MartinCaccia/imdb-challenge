@@ -1,0 +1,24 @@
+import { Transform } from "class-transformer";
+import { IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
+
+
+export class CreateUserDto {
+    @IsString()
+    @IsEmail()
+    @Transform(({ value }) => value.toLowerCase().trim())
+    email: string;
+
+    @IsString()
+    @MinLength(6)
+    @MaxLength(50)
+    @Matches(
+        /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'The password must have at least six character with a uppercase, lowercase letter and a number'
+    })
+    password: string;
+
+    @IsString()
+    @MinLength(3)
+    @Transform(({ value }) => value.toLowerCase().trim())
+    fullName: string;
+}
